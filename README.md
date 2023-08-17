@@ -1,1 +1,1 @@
-Assignments completed in Machine Learning Course
+Programming assignments completed during Machine Learning Course
