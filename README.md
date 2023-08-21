@@ -1,6 +1,6 @@
 # Machine Learning and Large-Scale Data Analysis (UChicago CMSC 35025)
 
-- **HW1**: K-means clustering, text analysis
+- **HW1**: K-means clustering, text analysis, regression
 - **HW2**: Textual analysis, document clustering of State of the Union addresses, spectral decomposition
 - **HW3**: Handwritten data analysis, PCA, dimension reduction, mixture model, K-means
 - **HW4**: Bernoulli mixture model, logistic regression, stochastic gradient descent
