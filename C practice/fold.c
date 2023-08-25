@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 /*
-Exercise 1-22
+Exercise 1-22   
 */
 
 int main() {
