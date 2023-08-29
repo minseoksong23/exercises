@@ -4,6 +4,7 @@
 - **HW2**: Textual analysis, document clustering of State of the Union addresses, spectral decomposition
 - **HW3**: Handwritten data analysis, PCA, dimension reduction, mixture model, K-means
 - **HW4**: Bernoulli mixture model, logistic regression, stochastic gradient descent
+- **HW5**: Implementation of Convolutional Neural Networks using PyTorch on MNIST and CIFAR datasets, hyperparameter tuning, and performance analysis.
 
 # Natural Language Processing with Deep Learning (Stanford CS 224N)
 
