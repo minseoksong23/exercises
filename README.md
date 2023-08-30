@@ -10,3 +10,9 @@
 # Natural Language Processing with Deep Learning (Stanford CS 224N)
 
 - **HW1**: Word embedding (Word2Vec, GloVe) vs. co-occurrence matrix comparison, cosine similarity, bias addressing, dimensionality reduction
+
+# C Practice
+
+- This folder contains exercises sourced from the book "C Programming Language" by Brian W. Kernighan and Dennis M. Ritchie. My long-term goal is to delve into the workings of operating systems. Understanding C is a significant step towards this, as it's used in OS development for its performance and control over hardware.
+
+
