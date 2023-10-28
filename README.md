@@ -11,7 +11,7 @@
 
 - **HW1**: Word embedding (Word2Vec, GloVe) vs. co-occurrence matrix comparison, cosine similarity, bias addressing, dimensionality reduction
 
-# C Practice
+# C by K & R
 
 - This folder contains exercises sourced from the book "C Programming Language" by Brian W. Kernighan and Dennis M. Ritchie.
   
