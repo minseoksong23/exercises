@@ -1,0 +1,1 @@
+/usr/bin/cc  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o libmatmul.dylib -install_name @rpath/libmatmul.dylib CMakeFiles/matmul.dir/matmul.c.o
