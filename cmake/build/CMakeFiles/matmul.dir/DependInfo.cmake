@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/minseoksong/Desktop/project/matmul.c" "CMakeFiles/matmul.dir/matmul.c.o" "gcc" "CMakeFiles/matmul.dir/matmul.c.o.d"
+  "/Users/minseoksong/Desktop/github/exercise for interview/matmul.c" "CMakeFiles/matmul.dir/matmul.c.o" "gcc" "CMakeFiles/matmul.dir/matmul.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

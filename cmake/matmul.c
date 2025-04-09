@@ -1,5 +1,7 @@
 #include "matmul.h"
 
+void matmul(const double* A, const double* x, double* y, size_t N, size_t M);
+
 void matmul(const double* A, const double* x, double* y, size_t N, size_t M) {
     // For each row i in [0..N-1]
     for (size_t i = 0; i < N; i++) {

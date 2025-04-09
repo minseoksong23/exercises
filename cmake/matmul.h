@@ -1,11 +1,7 @@
-#ifndef MATMUL_H
+#ifndef MATMUL_H // prevent multiple inclusions
 #define MATMUL_H
 
-#include <stddef.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stddef.h> // needed for size_t
 
 /**
  * Multiplies an N x M matrix A by an M x 1 vector x, producing an N x 1 vector y.
@@ -17,9 +13,5 @@ extern "C" {
  * @param M  Number of columns in A (and length of vector x).
  */
 void matmul(const double* A, const double* x, double* y, size_t N, size_t M);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // MATMUL_H

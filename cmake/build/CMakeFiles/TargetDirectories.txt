@@ -1,0 +1,3 @@
+/Users/minseoksong/Desktop/github/exercise for interview/build/CMakeFiles/matmul.dir
+/Users/minseoksong/Desktop/github/exercise for interview/build/CMakeFiles/edit_cache.dir
+/Users/minseoksong/Desktop/github/exercise for interview/build/CMakeFiles/rebuild_cache.dir
