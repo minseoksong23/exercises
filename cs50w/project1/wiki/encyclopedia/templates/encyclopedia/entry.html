@@ -5,12 +5,9 @@
 {% endblock %}
 
 {% block body %}
-<h1>All Pages</h1>
+<h1>{{ name }}</h1>
 
-<ul>
-    {% for entry in entries %}
-        <li>{{ entry }}</li>
-    {% endfor %}
-</ul>
+{{ content }}
 
 {% endblock %}
+
