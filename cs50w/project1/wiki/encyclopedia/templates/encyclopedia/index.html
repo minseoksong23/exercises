@@ -8,7 +8,7 @@
 <h1>SearchWiki</h1>
 
 <ul>
-    <form action="{% url 'encyclopedia:entry' entry %}" method="post">
+    <form action="{% url 'encyclopedia:index' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit">

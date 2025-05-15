@@ -25,8 +25,8 @@ def index(request):
     if request.method == "POST":
         form = NewTaskForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data["task"] in util.list_entries:
-                return HttpResponseRedirect(reverse(f"encyclopedia:{form.cleaned_data['task']}"))
+            if form.cleaned_data["task"] in util.list_entries():
+                return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data['task']]))
         return render(request, "encyclopedia/index.html", {
             "form": form,
             "entries": subst(form.cleaned_data["task"], util.list_entries())
