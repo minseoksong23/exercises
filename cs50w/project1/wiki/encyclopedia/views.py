@@ -10,7 +10,7 @@ class CreateForm(forms.Form):
     content = forms.CharField(label="content", required=False)
 
 class SearchForm(forms.Form):
-    search = forms.CharField(label="search", required=False)
+    search = forms.CharField(label="Search", required=False)
 
 def subst(word,lst):
     ls = []
@@ -31,13 +31,9 @@ def index(request):
         if form.is_valid():
             if form.cleaned_data["search"] in util.list_entries():
                 return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data['search']]))
-            else:
-                return render(request, "encyclopedia/index.html", {
+            return render(request, "encyclopedia/index.html", {
                 "entries":subst(form.cleaned_data['search'], util.list_entries())
-        })
-        return render(request, "encyclopedia/index.html", {
-                "entries":util.list_entries()
-    })
+             })
     return render(request, "encyclopedia/index.html", {
             "entries":util.list_entries()
     })
