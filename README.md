@@ -25,5 +25,6 @@
 This folder includes implementations of various optimization problems using CVX, alongside a comparison of different descent schemes developed from scratch. Additionally, I have implemented a basic linear programming solution from the ground up using the Newton method.
 
 ## CS50w
-project 0: html
-project 1: Django
+- project 0: html
+- project 1: Django
+
