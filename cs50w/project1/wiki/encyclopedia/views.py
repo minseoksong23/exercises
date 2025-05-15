@@ -5,10 +5,13 @@ from django.urls import reverse
 from django import forms
 from . import util
 
-class NewTaskForm(forms.Form):
-    task = forms.CharField(label="New Task", required=False)
+class CreateForm(forms.Form):
+    title = forms.CharField(label="title", required=False)
+    content = forms.CharField(label="content", required=False)
 
-                
+class SearchForm(forms.Form):
+    search = forms.CharField(label="search", required=False)
+
 def subst(word,lst):
     ls = []
     len_word=len(word)
@@ -24,13 +27,17 @@ def subst(word,lst):
 
 def index(request):
     if request.method == "POST":
-        form = NewTaskForm(request.POST)
+        form = SearchForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data["task"] in util.list_entries():
-                return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data['task']]))
-        return render(request, "encyclopedia/index.html", {
-            "entries":subst(form.cleaned_data['task'], util.list_entries())
+            if form.cleaned_data["search"] in util.list_entries():
+                return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data['search']]))
+            else:
+                return render(request, "encyclopedia/index.html", {
+                "entries":subst(form.cleaned_data['search'], util.list_entries())
         })
+        return render(request, "encyclopedia/index.html", {
+                "entries":util.list_entries()
+    })
     return render(request, "encyclopedia/index.html", {
             "entries":util.list_entries()
     })
@@ -43,12 +50,11 @@ def entry(request, name):
 
 def create(request):
     if request.method == "POST":
-        title = request.POST.get("title")
-        content = request.POST.get("content")
-        if title.is_valid() and content.is_valid():
-            if title.cleaned_data["task"] not in util.list_entries():
-                util.save_entry(title.clean_data["task"], content.clean_data["task"])
-                return HttpResponseRedirect(reverse("encyclopedia:title", args=[title.clean_data["task"]]))
+        form = CreateForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data["title"] not in util.list_entries():
+                util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
+                return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data["title"]]))
             else: 
                 return HttpResponse("error")
         else:
