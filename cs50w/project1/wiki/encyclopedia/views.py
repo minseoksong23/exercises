@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
@@ -38,4 +39,20 @@ def entry(request, name):
     return render(request, "encyclopedia/entry.html", {
         "name": name,
         "content": util.get_entry(name)
+    })
+
+def create(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        if title.is_valid() and content.is_valid():
+            if title.cleaned_data["task"] not in util.list_entries():
+                util.save_entry(title.clean_data["task"], content.clean_data["task"])
+                return HttpResponseRedirect(reverse("encyclopedia:title", args=[title.clean_data["task"]]))
+            else: 
+                return HttpResponse("error")
+        else:
+            return render(request, "encyclopedia/create.html", {
+            })
+    return render(request, "encyclopedia/create.html", {
     })
