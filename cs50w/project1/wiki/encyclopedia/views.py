@@ -10,7 +10,7 @@ class CreateForm(forms.Form):
     content = forms.CharField(label="content", required=False)
 
 class SearchForm(forms.Form):
-    search = forms.CharField(label="Search", required=False)
+    search = forms.CharField(label="search", required=False)
 
 def subst(word,lst):
     ls = []
@@ -39,6 +39,12 @@ def index(request):
     })
 
 def entry(request, name):
+    if request.method=="POST":
+        request.session["flag"]=True
+        return render(request, "encyclopedia/create.html", {
+            "name" : name,
+            "content" : util.get_entry(name)
+        })
     return render(request, "encyclopedia/entry.html", {
         "name": name,
         "content": util.get_entry(name)
@@ -52,7 +58,13 @@ def create(request):
                 util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
                 return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data["title"]]))
             else: 
-                return HttpResponse("error")
+                if request.session.pop("flag", False):
+                    return render(request, "encyclopedia/entry.html", {
+                        "name": form.cleaned_data["title"],
+                        "content": form.cleaned_data["content"]
+                    })
+                else:
+                    return HttpResponse("error")
         else:
             return render(request, "encyclopedia/create.html", {
             })
