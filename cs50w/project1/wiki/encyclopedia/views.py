@@ -5,7 +5,7 @@ from django import forms
 from . import util
 
 class NewTaskForm(forms.Form):
-    task = forms.CharField(label="New Task")
+    task = forms.CharField(label="New Task", required=False)
 
                 
 def subst(word,lst):
@@ -28,12 +28,10 @@ def index(request):
             if form.cleaned_data["task"] in util.list_entries():
                 return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data['task']]))
         return render(request, "encyclopedia/index.html", {
-            "form": form,
-            "entries": subst(form.cleaned_data["task"], util.list_entries())
+            "entries":subst(form.cleaned_data['task'], util.list_entries())
         })
     return render(request, "encyclopedia/index.html", {
-        "form": NewTaskForm(),
-        " ": entry
+            "entries":util.list_entries()
     })
 
 def entry(request, name):
