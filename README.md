@@ -26,3 +26,4 @@ This folder includes implementations of various optimization problems using CVX,
 
 ## CS50w
 project 0: html
+project 1: Django
