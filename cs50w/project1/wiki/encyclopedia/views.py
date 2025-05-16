@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
 from . import util
+import random
 
 class CreateForm(forms.Form):
     title = forms.CharField(label="title", required=False)
@@ -70,3 +71,10 @@ def create(request):
             })
     return render(request, "encyclopedia/create.html", {
     })
+
+def rand(request):
+    entries = util.list_entries()
+    random_title = random.choice(entries)
+    return HttpResponseRedirect(reverse("encyclopedia:entry", 
+                args=[random_title]))
+
