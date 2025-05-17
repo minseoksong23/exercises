@@ -5,6 +5,7 @@ from django.urls import reverse
 from django import forms
 from . import util
 import random
+import markdown2
 
 class CreateForm(forms.Form):
     title = forms.CharField(label="title", required=False)
@@ -56,13 +57,13 @@ def create(request):
         form = CreateForm(request.POST)
         if form.is_valid():
             if form.cleaned_data["title"] not in util.list_entries():
-                util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
+                util.save_entry(form.cleaned_data["title"], markdown2.markdown(form.cleaned_data["content"]))
                 return HttpResponseRedirect(reverse("encyclopedia:entry", args=[form.cleaned_data["title"]]))
             else: 
                 if request.session.pop("flag", False):
                     return render(request, "encyclopedia/entry.html", {
                         "name": form.cleaned_data["title"],
-                        "content": form.cleaned_data["content"]
+                        "content": markdown2.markdown(form.cleaned_data["content"])
                     })
                 else:
                     return HttpResponse("error")

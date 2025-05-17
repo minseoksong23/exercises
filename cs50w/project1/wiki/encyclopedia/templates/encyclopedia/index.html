@@ -9,8 +9,10 @@
 
 <ul>
     {% for entry in entries %}
+        {% if entry %}
         <li>
             <a href="{% url 'encyclopedia:entry' entry %}">{{ entry }}</a>
+        {% endif %}
             {% empty %}
                 <li>No match.</li>
         </li>

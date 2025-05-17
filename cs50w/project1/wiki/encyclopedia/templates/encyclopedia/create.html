@@ -8,7 +8,7 @@
 <form action="{% url 'encyclopedia:create' %}" method="post">
     {% csrf_token %}
     <label for="id_title">Title</label>
-    <input id="id_title" type="text" name="title" value={{ name }}>
+    <input id="id_title" type="text" name="title" required pattern=".*\S.*" value={{ name }}>
 
     <label for="id_content"></label>
     <textarea id="id_content" name="content" rows="4" cols="30">{{ content }}</textarea>
