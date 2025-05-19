@@ -12,7 +12,7 @@ class ListingForm(forms.Form):
     description = forms.CharField(label="description", required=False)
     starting_bid = forms.IntegerField(label="starting_bid", required=False)
     url = forms.URLField(label="url", required=False)
-    #select 
+    category = forms.CharField(label="category", required=False) 
 
 def create(request):
     if request.method == "POST":
@@ -22,7 +22,8 @@ def create(request):
                 title = form.cleaned_data["title"],
                 description = form.cleaned_data["description"],
                 starting_bid = form.cleaned_data["starting_bid"],
-                #url = form.cleaned_data["url"]
+                url = form.cleaned_data["url"],
+                category = form.cleaned_data["category"]
             )
         return HttpResponseRedirect(reverse("index"))
     else:

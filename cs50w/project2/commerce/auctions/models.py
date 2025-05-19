@@ -10,8 +10,7 @@ class Listing(models.Model):
     description = models.TextField()
     starting_bid = models.IntegerField()
     url = models.URLField(blank=True) # optional
-    #category = models.CharField(max_length=20)
-    #category: Fashion, Toys, Electronics, Home, etc
+    category = models.CharField(max_length=20, null=True) 
 
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bid_item")
