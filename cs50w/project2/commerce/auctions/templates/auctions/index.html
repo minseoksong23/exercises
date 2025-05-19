@@ -4,16 +4,16 @@
     <h2>Active Listings</h2>
     {% for lst in Listing %}
     <ul>
-        <div style="color:blue">{{ lst.title }}</div> 
+        <a href="{% url 'item' lst.title %}" style="color:blue">{{ lst.title }}</a>
     {% if not lst.url %}
     <li>No photo available</li>
     {% else %}
     <img src="{{ lst.url }}" width ="300">
     {% endif %}
 
-    <li>description: {{ lst.description }}</li>
-    <li>starting bid: {{ lst.starting_bid }}</li>
-    <li>category: {{ lst.category }}</li>
+    <li>Description: {{ lst.description }}</li>
+    <li>Current price: {{ lst.starting_bid }}</li>
+    <li>Category: {{ lst.category }}</li>
     </ul>
     {% endfor %}
     <a href="{% url 'create' %}">Create a new list</a>

@@ -14,6 +14,9 @@ class ListingForm(forms.Form):
     url = forms.URLField(label="url", required=False)
     category = forms.CharField(label="category", required=False) 
 
+class CommentForm(forms.Form):
+    body = forms.CharField(label="body", required=False)
+
 def create(request):
     if request.method == "POST":
         form = ListingForm(request.POST)
@@ -28,6 +31,21 @@ def create(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create.html")  
+
+def item(request, item):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            Comment.objects.create(
+                listing = Listing.objects.filter(title=item).first(),
+                commenter = request.user, 
+                body = form.cleaned_data["body"]
+            )
+            return HttpResponseRedirect(reverse("item", args=[item]))
+    return render(request, "auctions/item.html", {
+        "item": Listing.objects.filter(title=item).first(),
+        "comments": Comment.objects.all()
+    })
 
 def index(request):
     return render(request, "auctions/index.html", {
