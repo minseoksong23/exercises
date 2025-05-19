@@ -9,7 +9,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
     starting_bid = models.IntegerField()
-    #url = models.URLField(blank=True) # optional
+    url = models.URLField(blank=True) # optional
     #category = models.CharField(max_length=20)
     #category: Fashion, Toys, Electronics, Home, etc
 

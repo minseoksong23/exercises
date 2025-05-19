@@ -4,9 +4,16 @@
     <h2>Active Listings</h2>
     {% for lst in Listing %}
     <ul>
-    <li>{{ lst.title }}</li>
-    <li>{{ lst.description }}</li>
-    <li>{{ lst.starting_bid }}</li>
+        <div style="color:blue">{{ lst.title }}</div> 
+    {% if not lst.url %}
+    <li>No photo available</li>
+    {% else %}
+    <img src="{{ lst.url }}" width ="300">
+    {% endif %}
+
+    <li>description: {{ lst.description }}</li>
+    <li>starting bid: {{ lst.starting_bid }}</li>
     </ul>
     {% endfor %}
+    <a href="{% url 'create' %}">Create a new list</a>
 {% endblock %}

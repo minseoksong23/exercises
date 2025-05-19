@@ -11,7 +11,7 @@ class ListingForm(forms.Form):
     title = forms.CharField(label="listing", required=False)
     description = forms.CharField(label="description", required=False)
     starting_bid = forms.IntegerField(label="starting_bid", required=False)
-    #url = forms.URLField(label="url", required=False)
+    url = forms.URLField(label="url", required=False)
     #select 
 
 def create(request):
