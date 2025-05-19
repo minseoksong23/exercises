@@ -1,14 +1,37 @@
 from django.contrib.auth import authenticate, login, logout
+from django import forms
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing, Bid, Comment 
 
+class ListingForm(forms.Form):
+    title = forms.CharField(label="listing", required=False)
+    description = forms.CharField(label="description", required=False)
+    starting_bid = forms.IntegerField(label="starting_bid", required=False)
+    #url = forms.URLField(label="url", required=False)
+    #select 
+
+def create(request):
+    if request.method == "POST":
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            Listing.objects.create(
+                title = form.cleaned_data["title"],
+                description = form.cleaned_data["description"],
+                starting_bid = form.cleaned_data["starting_bid"],
+                #url = form.cleaned_data["url"]
+            )
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "auctions/create.html")  
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "Listing": Listing.objects.all()        
+    })
 
 
 def login_view(request):
@@ -61,3 +84,4 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+

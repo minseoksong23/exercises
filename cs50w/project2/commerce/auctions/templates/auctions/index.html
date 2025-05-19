@@ -2,6 +2,11 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    {% for lst in Listing %}
+    <ul>
+    <li>{{ lst.title }}</li>
+    <li>{{ lst.description }}</li>
+    <li>{{ lst.starting_bid }}</li>
+    </ul>
+    {% endfor %}
 {% endblock %}
