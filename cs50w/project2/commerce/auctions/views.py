@@ -17,6 +17,9 @@ class ListingForm(forms.Form):
 class CommentForm(forms.Form):
     body = forms.CharField(label="body", required=False)
 
+class WatchForm(forms.Form):
+    watch = forms.CharField(label="watch", required=False)
+
 def create(request):
     if request.method == "POST":
         form = ListingForm(request.POST)
@@ -31,6 +34,16 @@ def create(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create.html")  
+
+def watchlist(request, lst):
+    if request.method == "POST":
+        form = WatchForm(request.POST)
+        if form.is_valid():
+            lst = Listing.objects.filter(title=lst).first()
+            lst.watcher.add(request.user)
+    return render(request, "watchlist.html",{ 
+        request.user.watched_listings.all():"watchlists"
+    })
 
 def item(request, item):
     if request.method == "POST":

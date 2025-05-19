@@ -10,7 +10,9 @@
 <li>Description: <{{ item.description }}/li>
 <li>Current price: {{ item.starting_bid }}</li>
 <li>Category: {{ item.category }}</li>
-
+<form action="{% url 'watchlist' %} method="post">
+<br>
+    <input type="submit" value="add to watchlist" style="color:blue">
 <br><br>
 <br><br>
 
