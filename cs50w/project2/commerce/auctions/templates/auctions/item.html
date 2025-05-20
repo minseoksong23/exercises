@@ -11,15 +11,26 @@
 <li>Current price: {{ item.starting_bid }}</li>
 <li>Category: {{ item.category }}</li>
 
-<form action="{% url 'watchlist' %}" method="post">
+<br>
+<br><br>
+
+{% if user in item.watcher.all %}
+<form action="{% url 'togglewatch' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="title" value="{{ item.title }}">
-<br>
-    <input type="submit" value="add to watchlist" style="color:blue">
-<br><br>
-<br><br>
+    <input type="hidden" name="add_or_remove" value="2">
+    <input type="submit" value="remove from watchlist">
 </form>
+{% else %}
+<form action="{% url 'togglewatch' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="title" value="{{ item.title }}">
+    <input type="hidden" name="add_or_remove" value="1">
+    <input type="submit" value="add to watchlist">
+</form>
+{% endif %}
 
+<br><br>
 <form method="post">
     {% csrf_token %}
     <label for="comment">Comment:</label>

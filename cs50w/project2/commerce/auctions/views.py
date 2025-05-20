@@ -36,15 +36,21 @@ def create(request):
         return render(request, "auctions/create.html")  
 
 def watchlist(request):
-    if request.method == "POST":
-        form = WatchForm(request.POST)
-        if form.is_valid():
-            #lst = Listing.objects.filter(title=request.POST.get("title")).first()
-            lst = get_object_or_404(Listing, title=request.POST.get("title"))
-            lst.watcher.add(request.user)
     return render(request, "auctions/watchlist.html",{ 
         "watchlists": request.user.watched_listings.all()
     })
+
+def togglewatch(request):
+    if request.method == "POST":
+        form = WatchForm(request.POST)
+        if form.is_valid(): 
+            lst= get_object_or_404(Listing, title=request.POST.get("title"))
+            if request.POST.get("add_or_remove")=="1": #add
+                lst.watcher.add(request.user)
+                return HttpResponseRedirect(reverse("item", args=[request.POST.get('title')]))
+            else:
+                lst.watcher.remove(request.user)
+                return HttpResponseRedirect(reverse("item", args=[request.POST.get('title')]))
 
 def item(request, item):
     if request.method == "POST":
