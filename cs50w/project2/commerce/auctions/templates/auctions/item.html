@@ -12,7 +12,12 @@
 <li>Category: {{ item.category }}</li>
 
 <br>
-<br><br>
+<form action="{% url 'bid' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="title" value="{{ item.title }}">
+    <input type="number" min="{{ item.starting_bid }}" name="bid">
+    <input type="submit" value="bid">
+</form>
 
 {% if user in item.watcher.all %}
 <form action="{% url 'togglewatch' %}" method="post">

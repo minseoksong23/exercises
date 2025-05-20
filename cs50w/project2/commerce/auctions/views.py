@@ -7,6 +7,10 @@ from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment 
 
+class BidForm(forms.Form):
+    title = forms.CharField(label='title', required=False)
+    bid = forms.IntegerField(label='bid', required=False)
+
 class ListingForm(forms.Form):
     title = forms.CharField(label="listing", required=False)
     description = forms.CharField(label="description", required=False)
@@ -34,6 +38,15 @@ def create(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create.html")  
+
+def bid(request):
+    if request.method == 'POST':
+        form = BidForm(request.POST)
+        if form.is_valid():
+            lst = Listing.objects.get(title=form.cleaned_data["title"])
+            lst.starting_bid = form.cleaned_data["bid"]
+            lst.save()
+    return HttpResponseRedirect(reverse("item", args=[form.cleaned_data["title"]]))
 
 def watchlist(request):
     return render(request, "auctions/watchlist.html",{ 
