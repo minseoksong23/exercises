@@ -3,6 +3,6 @@
 {% block body %}
     <h2>Wachlist</h2>
     {% for watch in watchlists %}
-    {{ watch }}
+    <ul><a href="{% url 'item' watch.title %}">{{ watch.title }}</a></ul>
     {% endfor %}
 {% endblock %}

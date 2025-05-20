@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django import forms
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment 
@@ -35,14 +35,15 @@ def create(request):
     else:
         return render(request, "auctions/create.html")  
 
-def watchlist(request, lst):
+def watchlist(request):
     if request.method == "POST":
         form = WatchForm(request.POST)
         if form.is_valid():
-            lst = Listing.objects.filter(title=lst).first()
+            #lst = Listing.objects.filter(title=request.POST.get("title")).first()
+            lst = get_object_or_404(Listing, title=request.POST.get("title"))
             lst.watcher.add(request.user)
-    return render(request, "watchlist.html",{ 
-        request.user.watched_listings.all():"watchlists"
+    return render(request, "auctions/watchlist.html",{ 
+        "watchlists": request.user.watched_listings.all()
     })
 
 def item(request, item):
