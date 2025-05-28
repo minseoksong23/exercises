@@ -4,7 +4,7 @@
     <h2>Active Listings</h2>
     {% for lst in Listing %}
     <ul>
-        <ul><a href="{% url 'item' lst.title %}" style="color:blue">{{ lst.title }}</a></ul>
+        <ul><a href="{% url 'item' lst.id %}" style="color:blue">{{ lst.title }}</a></ul>
     {% if not lst.url %}
     <li>No photo available</li>
     {% else %}

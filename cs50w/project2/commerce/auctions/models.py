@@ -14,8 +14,15 @@ class Listing(models.Model):
     watcher = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="watched_listings",
-        blank=True
-    )
+        blank=True)
+    is_closed = models.BooleanField(default = False)
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE,
+        related_name = "listings"
+        )
+    
+    
 
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bid_item")

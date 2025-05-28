@@ -7,7 +7,7 @@
 {% else %}
 <img src="{{ item.url }}" width = "600">
 {% endif %}
-<li>Description: <{{ item.description }}/li>
+<li>Description: {{ item.description }}</li>
 <li>Current price: {{ item.starting_bid }}</li>
 <li>Category: {{ item.category }}</li>
 
@@ -35,12 +35,22 @@
 </form>
 {% endif %}
 
+{% if user.is_authenticated and user == item.creator and not item.is_closed %}
+<form action="{% url 'close_listing' item.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="close this listing">
+</form>
+{% endif %}
+
+
+
 <br><br>
 <form method="post">
     {% csrf_token %}
     <label for="comment">Comment:</label>
     <input id="comment" name="body" type="text">
     <input type="submit">
+</form>
 {% for comment in comments reversed %}
 <div>
     {{ comment.commenter }}: {{ comment.body }}

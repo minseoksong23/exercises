@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django import forms
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Bid, Comment 
 
@@ -11,12 +12,16 @@ class BidForm(forms.Form):
     title = forms.CharField(label='title', required=False)
     bid = forms.IntegerField(label='bid', required=False)
 
-class ListingForm(forms.Form):
-    title = forms.CharField(label="listing", required=False)
-    description = forms.CharField(label="description", required=False)
-    starting_bid = forms.IntegerField(label="starting_bid", required=False)
-    url = forms.URLField(label="url", required=False)
-    category = forms.CharField(label="category", required=False) 
+class ListingForm(forms.ModelForm):
+    class Meta:
+        model = Listing
+        fields = ("title", "description", "starting_bid", "url", "category")
+
+    def clean_starting_bid(self):
+        bid = self.cleaned_data["starting_bid"]
+        if bid <= 0:
+            raise forms.ValidationError("Bid must be positive")
+        return bid
 
 class CommentForm(forms.Form):
     body = forms.CharField(label="body", required=False)
@@ -28,16 +33,28 @@ def create(request):
     if request.method == "POST":
         form = ListingForm(request.POST)
         if form.is_valid():
-            Listing.objects.create(
-                title = form.cleaned_data["title"],
-                description = form.cleaned_data["description"],
-                starting_bid = form.cleaned_data["starting_bid"],
-                url = form.cleaned_data["url"],
-                category = form.cleaned_data["category"]
-            )
+            new_listing = form.save(commit=False)
+            new_listing.creator = request.user
+            new_listing.save()
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create.html")  
+
+@login_required
+def close_listing(request, listing_id):
+    if request.method != "POST":
+        raise Http404()
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if request.user != listing.creator:
+        return HttpResponseForbidden("You cannot close this listing")
+
+    if listing.is_closed:
+        return Http404("The listing is already closed")
+
+    listing.is_closed = True
+    listing.save()
+    return HttpResponseRedirect(reverse("index"))
+
 
 def bid(request):
     if request.method == 'POST':
@@ -65,19 +82,19 @@ def togglewatch(request):
                 lst.watcher.remove(request.user)
                 return HttpResponseRedirect(reverse("item", args=[request.POST.get('title')]))
 
-def item(request, item):
+def item(request, item_id):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             Comment.objects.create(
-                listing = Listing.objects.filter(title=item).first(),
+                listing = Listing.objects.filter(id=item_id).first(),
                 commenter = request.user, 
                 body = form.cleaned_data["body"]
             )
-            return HttpResponseRedirect(reverse("item", args=[item]))
+            return HttpResponseRedirect(reverse("item", args=[item_id]))
     return render(request, "auctions/item.html", {
-        "item": Listing.objects.filter(title=item).first(),
-        "comments": Comment.objects.all()
+        "item": Listing.objects.get(id=item_id),
+        "comments": Comment.objects.filter(listing = Listing.objects.filter(id=item_id).first())
     })
 
 def index(request):
