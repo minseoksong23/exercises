@@ -15,10 +15,10 @@ class BidForm(forms.Form):
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
-        fields = ("title", "description", "starting_bid", "url", "category")
+        fields = ("title", "description", "starting_price", "url", "category")
 
-    def clean_starting_bid(self):
-        bid = self.cleaned_data["starting_bid"]
+    def clean_starting_price(self):
+        bid = self.cleaned_data["starting_price"]
         if bid <= 0:
             raise forms.ValidationError("Bid must be positive")
         return bid
@@ -55,13 +55,12 @@ def close_listing(request, listing_id):
     listing.save()
     return HttpResponseRedirect(reverse("index"))
 
-
 def bid(request):
     if request.method == 'POST':
         form = BidForm(request.POST)
         if form.is_valid():
             lst = Listing.objects.get(title=form.cleaned_data["title"])
-            lst.starting_bid = form.cleaned_data["bid"]
+            lst.starting_price = form.cleaned_data["bid"]
             lst.save()
     return HttpResponseRedirect(reverse("item", args=[form.cleaned_data["title"]]))
 
@@ -74,13 +73,13 @@ def togglewatch(request):
     if request.method == "POST":
         form = WatchForm(request.POST)
         if form.is_valid(): 
-            lst= get_object_or_404(Listing, title=request.POST.get("title"))
+            lst= get_object_or_404(Listing, id=int(request.POST.get("id")))
             if request.POST.get("add_or_remove")=="1": #add
                 lst.watcher.add(request.user)
-                return HttpResponseRedirect(reverse("item", args=[request.POST.get('title')]))
+                return HttpResponseRedirect(reverse("item", args=[int(request.POST.get('id'))]))
             else:
                 lst.watcher.remove(request.user)
-                return HttpResponseRedirect(reverse("item", args=[request.POST.get('title')]))
+                return HttpResponseRedirect(reverse("item", args=[int(request.POST.get('id'))]))
 
 def item(request, item_id):
     if request.method == "POST":

@@ -2,34 +2,40 @@
 
 {% block body %}
 <h2>{{ item.title }}</h2>
+
+{% if not item.is_closed %}
+<li>This item is closed</li>
+{% endif %}
+
 {% if not item.url %}
 <li>No photo available</li>
 {% else %}
 <img src="{{ item.url }}" width = "600">
 {% endif %}
+<li>Creator: {{ item.creator }}</li>
 <li>Description: {{ item.description }}</li>
-<li>Current price: {{ item.starting_bid }}</li>
+<li>Current price: {{ item.starting_price }}</li>
 <li>Category: {{ item.category }}</li>
 
 <br>
-<form action="{% url 'bid' %}" method="post">
+<form action="{% url 'bid' item.id %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="title" value="{{ item.title }}">
-    <input type="number" min="{{ item.starting_bid }}" name="bid">
+    <input type="number" min="{{ item.starting_price }}" name="bid">
     <input type="submit" value="bid">
 </form>
 
 {% if user in item.watcher.all %}
 <form action="{% url 'togglewatch' %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="title" value="{{ item.title }}">
+    <input type="hidden" name="id" value="{{ item.id }}">
     <input type="hidden" name="add_or_remove" value="2">
     <input type="submit" value="remove from watchlist">
 </form>
 {% else %}
 <form action="{% url 'togglewatch' %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="title" value="{{ item.title }}">
+    <input type="hidden" name="id" value="{{ item.id }}">
     <input type="hidden" name="add_or_remove" value="1">
     <input type="submit" value="add to watchlist">
 </form>
@@ -45,7 +51,7 @@
 
 
 <br><br>
-<form method="post">
+<form action = "{% url 'item' item.id %}" method="post">
     {% csrf_token %}
     <label for="comment">Comment:</label>
     <input id="comment" name="body" type="text">
