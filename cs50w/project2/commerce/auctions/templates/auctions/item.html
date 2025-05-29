@@ -3,8 +3,8 @@
 {% block body %}
 <h2>{{ item.title }}</h2>
 
-{% if not item.is_closed %}
-<li>This item is closed</li>
+{% if item.is_closed %}
+<li>This item is closed: the winner is {{ item.winner }} and the final price is {{ item.current_price }} dollars.</li>
 {% endif %}
 
 {% if not item.url %}
@@ -14,14 +14,15 @@
 {% endif %}
 <li>Creator: {{ item.creator }}</li>
 <li>Description: {{ item.description }}</li>
-<li>Current price: {{ item.starting_price }}</li>
+<li>Current price: {{ item.current_price }}</li>
 <li>Category: {{ item.category }}</li>
 
+<section class="comments">
 <br>
+<div class="actions">
 <form action="{% url 'bid' item.id %}" method="post">
     {% csrf_token %}
-    <input type="hidden" name="title" value="{{ item.title }}">
-    <input type="number" min="{{ item.starting_price }}" name="bid">
+    <input type="number" min="{{ item.current_price }}" name="bid">
     <input type="submit" value="bid">
 </form>
 
@@ -47,8 +48,7 @@
     <input type="submit" value="close this listing">
 </form>
 {% endif %}
-
-
+</div>
 
 <br><br>
 <form action = "{% url 'item' item.id %}" method="post">
@@ -62,5 +62,6 @@
     {{ comment.commenter }}: {{ comment.body }}
 </div>
 {% endfor %}
+</section>
 
 {% endblock %}

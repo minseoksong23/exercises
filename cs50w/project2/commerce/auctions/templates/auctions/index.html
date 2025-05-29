@@ -2,19 +2,28 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-    {% for lst in Listing %}
-    <ul>
-        <ul><a href="{% url 'item' lst.id %}" style="color:blue">{{ lst.title }}</a></ul>
+
+    <a href="{% url 'create' %}">Create a new list</a>
+    <ol>
+
+    {% for lst in Listing reversed %}
+
+    <li><a class="listing-link" href="{% url 'item' lst.id %}">{{ lst.title }}</a>
+    {% if lst.is_closed %}
+    (closed)
+    {% endif %}
+    </li>
+
     {% if not lst.url %}
-    <li>No photo available</li>
+    <ul>No photo available</ul>
     {% else %}
     <img src="{{ lst.url }}" width ="300">
     {% endif %}
 
-    <li>Description: {{ lst.description }}</li>
-    <li>Current price: {{ lst.starting_price }}</li>
-    <li>Category: {{ lst.category }}</li>
-    </ul>
+    <ul>Description: {{ lst.description }}</ul>
+    <ul>Current price: {{ lst.starting_price }}</ul>
+    <ul>Category: {{ lst.category }}</ul>
     {% endfor %}
-    <a href="{% url 'create' %}">Create a new list</a>
+
+    </ol>
 {% endblock %}
