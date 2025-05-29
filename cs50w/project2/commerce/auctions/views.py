@@ -1,15 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django import forms
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Bid, Comment 
 
 class BidForm(forms.Form):
-    title = forms.CharField(label='title', required=False)
     bid = forms.IntegerField(label='bid', required=False)
 
 class ListingForm(forms.ModelForm):
@@ -35,10 +35,16 @@ def create(request):
         if form.is_valid():
             new_listing = form.save(commit=False)
             new_listing.creator = request.user
+            new_listing.final_price = new_listing.starting_price
             new_listing.save()
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/create.html")  
+
+def category(request, category_str):
+    return render(request, "auctions/index.html", {
+        "Listing": Listing.objects.filter(category=category_str)        
+    })
 
 @login_required
 def close_listing(request, listing_id):
@@ -55,14 +61,26 @@ def close_listing(request, listing_id):
     listing.save()
     return HttpResponseRedirect(reverse("index"))
 
-def bid(request):
+def bid(request, item_id):
+    listing = get_object_or_404(Listing, pk = item_id)
+    if listing.is_closed:
+        messages.error(request, "This listing is closed. No further bids are allowed")
+        return redirect("item", item_id)
+
     if request.method == 'POST':
         form = BidForm(request.POST)
+
         if form.is_valid():
-            lst = Listing.objects.get(title=form.cleaned_data["title"])
-            lst.starting_price = form.cleaned_data["bid"]
-            lst.save()
-    return HttpResponseRedirect(reverse("item", args=[form.cleaned_data["title"]]))
+            bid_amount = form.cleaned_data["bid"]
+            lst = Listing.objects.get(id=item_id)
+            Bid.objects.create(listing=listing, bidder=request.user, bid=bid_amount)
+        else:
+            return render(request, "auctions/item.html", {
+                "item": listing,
+                "comments": listing.item_for_comment
+            })
+
+    return redirect("item", item_id)
 
 def watchlist(request):
     return render(request, "auctions/watchlist.html",{ 

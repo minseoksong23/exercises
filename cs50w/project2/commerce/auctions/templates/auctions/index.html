@@ -2,8 +2,20 @@
 
 {% block body %}
     <h2>Active Listings</h2>
+    
+    &emsp;
 
+    <a href="{% url 'category' "home" %}">home</a>
+    &emsp;
+    <a href="{% url 'category' "electronics" %}">electronics</a>
+    &emsp;
+    <a href="{% url 'category' "toys" %}">toys</a>
+    &emsp;
+    <a href="{% url 'category' "fashion" %}">fashion</a>
+
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
     <a href="{% url 'create' %}">Create a new list</a>
+
     <ol>
 
     {% for lst in Listing reversed %}

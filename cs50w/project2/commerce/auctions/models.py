@@ -31,18 +31,19 @@ class Listing(models.Model):
         null = True,
         blank = True,
         related_name = "won_item")
+
     final_price = models.IntegerField()
     
     @property
     def current_bid(self):
-        return self.bids.order_by('-amount').first()
+        return self.bid_item.order_by('-bid').first()
 
     @property
     def current_price(self):
         if self.is_closed and self.final_price is not None:
             return self.final_price
         top = self.current_bid
-        return top.amount if top else self.starting_price
+        return top.bid if top else self.starting_price
 
     @property
     def current_winner(self):

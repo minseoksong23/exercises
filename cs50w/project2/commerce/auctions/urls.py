@@ -12,5 +12,6 @@ urlpatterns = [
     path("togglewatch", views.togglewatch, name="togglewatch"),
     path("item/<int:item_id>", views.item, name="item"),
     path("item/<int:item_id>/bid", views.bid, name="bid"),
-    path("close/<int:listing_id>", views.close_listing, name="close_listing")
+    path("close/<int:listing_id>", views.close_listing, name="close_listing"),
+    path("index/<str:category_str>", views.category, name="category")
 ]
