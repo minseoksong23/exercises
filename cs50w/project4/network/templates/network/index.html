@@ -1,0 +1,14 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<p> Likes: <span id="like-count">{{ post.likes }}</span></p>
+<button id="like-button" type="button" data-post-id="{{ post.id }}">Like</button>
+
+{% csrf_token%}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
