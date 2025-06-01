@@ -1,34 +1,27 @@
-const likeBtn = document.getElementById("like-button");
-const likeCountSpan = document.getElementById("like-count");
-const csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+document.addEventListener('DOMContentLoaded', () => {
 
-likeBtn.addEventListener("click", () => {
+    const csrftoken = document.querySelector('meta[name="csrf-token"]').content;
 
-    const currentAction = likeBtn.textContent.trim().toLowerCase();
-    const newAction = currentAction === "like" ? "like" : "unlike";
+    document.querySelectorAll('.like-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const postId = btn.dataset.postId;
+            const action = btn.textContent.trim() === 'Like' ? 'like' : 'unlike';
 
-    const formData = new FormData();
-    formData.append("action", newAction);
+            const formData = new FormData();
+            formData.append('action', action);
 
-    const postId = likeBtn.getAttribute("data-post-id");
-    fetch(`/like-post/${postId}/`, {
-        method: "POST",
-        body: formData,
-        headers: { "X-CSRFToken": csrfToken },
-        credentials: "same-origin"
-    })
-    .then(response => response.json())
-    .then(data => {
-        likeCountSpan.textContent = data.likes;
-
-        if (newAction === "like"){
-            likeBtn.textContent = "Unlike";
-        } else {
-            likeBtn.textContent = "Like";
-        }
-    })
-    .catch(error => {
-        console.error("Error in like toggle:", error);
+            fetch(`/like-post/${postId}/`, {
+                method: 'POST', 
+                body: formData,
+                headers: { 'X-CSRFToken': csrftoken },
+                credentials: 'same-origin'
+            })
+            .then(r => r.json())
+            .then(data => {
+            document.getElementById(`like-count-${postId}`).textContent = data.likes;
+            btn.textContent = btn.textContent.trim() === 'Like' ? 'Unlike' : 'Like';
+            })
+            .catch(err => console.error(err));
+        })
     });
 });
-</script>
