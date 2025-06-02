@@ -11,7 +11,7 @@
 </form>
 
 <h1>All Posts</h1>
-{% for post in Post reversed %}
+{% for post in page_obj reversed %}
 <div class="post-item">
     <h2>{{ post.title }}</h2>
     <p><em>By <a href={% url 'profile' post.creator.id %}>{{ post.creator }}</a></em></p>
@@ -25,7 +25,17 @@
 {% endif %}
 
 </div>
+
 {% endfor %}
+
+{% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">prev</a>
+{% endif %}
+Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">next</a>
+{% endif %}
+
 {% endblock %}
 
 {% block script %}

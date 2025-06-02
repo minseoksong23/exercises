@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 
 from .models import User, Post
 
@@ -21,6 +22,8 @@ class EditForm(forms.Form):
 
 def index(request):
     posts = Post.objects.all()
+    paginator = Paginator(posts, 5)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -30,7 +33,7 @@ def index(request):
     else:
         form = PostForm()
     
-    context = {'form': form, 'Post': posts}
+    context = {'form': form, 'Post': posts, "page_obj": page_obj}
     return render(request, 'network/index.html', context)
 
 def edit_complete(request):
