@@ -95,6 +95,12 @@ def profile(request, user_id):
             "Post": Post.objects.filter(creator = user)
         })
 
+def follow(request):
+    posts = Post.objects.filter(creator__in=request.user.following.all())
+    return render(request, 'network/following.html', {
+        "posts": posts
+    })
+
 @login_required
 def edit(request, post_id):
     post = get_object_or_404(Post, pk=post_id)

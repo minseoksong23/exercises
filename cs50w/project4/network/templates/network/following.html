@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<h1>All Posts by people who I follow</h1>
+{% for post in posts %}
+<div class="post-item">
+    <h2>{{ post.title }}</h2>
+    <p><em>By <a href={% url 'profile' post.creator.id %}>{{ post.creator }}</a></em></p>
+    <div>{{ post.content }}</div>
+
+</div>
+{% endfor %}
+{% endblock %}
