@@ -3,10 +3,25 @@
 
 {% block body %}
 
-<p> Likes: <span id="like-count">{{ post.likes }}</span></p>
-<button id="like-button" type="button" data-post-id="{{ post.id }}">Like</button>
+<h1>Create a New Post</h1>
+<form method="POST" action="{% url 'create' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Post</button>
+</form>
 
-{% csrf_token%}
+<h1>All Posts</h1>
+{% for post in Post reversed %}
+<div class="post-item">
+    <h2>{{ post.title }}</h2>
+    <p><em>By <a href={% url 'profile' post.creator.id %}>{{ post.creator }}</a></em></p>
+    <div>{{ post.content }}</div>
+
+    <p> Likes: <span class="like-count" id="like-count-{{ post.id }}">{{ post.likes }}</span></p>
+    <button class="like-button" type="button" data-post-id="{{ post.id }}">Like</button>
+    </form>
+</div>
+{% endfor %}
 {% endblock %}
 
 {% block script %}

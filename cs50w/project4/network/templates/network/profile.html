@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+{% csrf_token %}
+
+<h1>Profile of {{ profile_user.username }}</h1>
+<p><button class="follow-button" type="button" data-user-id="{{ profile_user.id }}">follow</button></p>
+
+<p> Followers: <span id="follower-{{ profile_user.id }}">{{ followers_ }}</span></p>
+
+<p> Following: <span id="following-{{ profile_user.id }}">{{ following_ }}</span></p>
+
+{% for post in Post reversed %}
+<h2>title: {{ post.title }}</h2>
+<p>{{ post.content }}</p>
+{% endfor %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
