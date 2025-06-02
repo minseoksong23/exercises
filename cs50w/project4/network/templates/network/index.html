@@ -11,7 +11,7 @@
 </form>
 
 <h1>All Posts</h1>
-{% for post in page_obj reversed %}
+{% for post in page_obj %}
 <div class="post-item">
     <h2>{{ post.title }}</h2>
     <p><em>By <a href={% url 'profile' post.creator.id %}>{{ post.creator }}</a></em></p>

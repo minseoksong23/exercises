@@ -21,7 +21,7 @@ class EditForm(forms.Form):
     Id=forms.IntegerField(label="Id")
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-id')
     paginator = Paginator(posts, 5)
     page_obj = paginator.get_page(request.GET.get("page"))
 
@@ -114,7 +114,7 @@ def login_view(request):
     if request.method == "POST":
 
         # Attempt to sign user in
-        uosername = request.POST["username"]
+        username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
