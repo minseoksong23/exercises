@@ -19,7 +19,11 @@
 
     <p> Likes: <span class="like-count" id="like-count-{{ post.id }}">{{ post.likes }}</span></p>
     <button class="like-button" type="button" data-post-id="{{ post.id }}">Like</button>
-    </form>
+
+{% if post.creator == request.user %}
+        <button type="button" onclick="window.location.href='{% url 'edit' post.id %}'">Edit</button>
+{% endif %}
+
 </div>
 {% endfor %}
 {% endblock %}

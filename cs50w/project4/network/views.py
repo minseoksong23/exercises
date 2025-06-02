@@ -5,6 +5,7 @@ from django import forms
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from .models import User, Post
 
@@ -12,6 +13,11 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
+
+class EditForm(forms.Form):
+    title=forms.CharField(label="title")
+    content=forms.CharField(label="content")
+    Id=forms.IntegerField(label="Id")
 
 def index(request):
     posts = Post.objects.all()
@@ -26,6 +32,17 @@ def index(request):
     
     context = {'form': form, 'Post': posts}
     return render(request, 'network/index.html', context)
+
+def edit_complete(request):
+    form = EditForm(request.POST)
+    print(form.errors)
+    if form.is_valid():
+        post = Post.objects.get(id=form.cleaned_data["Id"])
+        post.title = form.cleaned_data["title"]
+        post.content = form.cleaned_data["content"]
+        post.save()
+        return HttpResponseRedirect(reverse("index"))
+    raise Http404("error editing")
 
 def create_post(request):
     if request.method == 'POST':
@@ -74,6 +91,15 @@ def profile(request, user_id):
             "following_": user.following.count(),
             "Post": Post.objects.filter(creator = user)
         })
+
+@login_required
+def edit(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if post.creator != request.user:
+        return PermissionDenied()
+    return render(request, 'network/edit.html', {
+            "post":post
+    })
 
 def login_view(request):
     if request.method == "POST":
